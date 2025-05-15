@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mario Correndo</title>
+<style>
+  body { margin: 0; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+
+<canvas id="marioCanvas"></canvas>
+
+<script>
+  const canvas = document.getElementById('marioCanvas');
+  const ctx = canvas.getContext('2d');
+
+  // Carregar a folha de sprites do Mario
+  const marioSprite = new Image();
+  marioSprite.src = 'mario_correndo.png'; // Substitua pelo caminho da sua imagem de sprites
+
+  // Definições do sprite
+  const spriteLargura = 32; // Largura de cada frame do sprite
+  const spriteAltura = 32; // Altura de cada frame do sprite
+  const numFrames = 4;    // Número de frames na animação de corrida
+  let frameAtual = 0;
+  let x = 50;             // Posição X inicial do Mario
+  const y = 150;            // Posição Y do Mario (chão)
+  const velocidade = 5;   // Velocidade de movimento do Mario
+
+  // Configurar o canvas
+  canvas.width = 300;
+  canvas.height = 200;
+
+  function animarMario() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Calcular a posição do frame atual na folha de sprites
+    const frameX = frameAtual * spriteLargura;
+
+    // Desenhar o frame atual do Mario
+    ctx.drawImage(
+      marioSprite,
+      frameX, 0,             // Coordenadas X e Y do frame na imagem
+      spriteLargura, spriteAltura, // Largura e altura do frame na imagem
+      x, y,                 // Coordenadas X e Y onde desenhar no canvas
+      spriteLargura, spriteAltura  // Largura e altura para desenhar no canvas
+    );
+
+    // Atualizar o frame para a próxima animação
+    frameAtual = (frameAtual + 1) % numFrames;
+
+    // Mover o Mario para a direita (loop infinito)
+    x += velocidade;
+    if (x > canvas.width) {
+      x = -spriteLargura;
+    }
+
+    // Solicitar o próximo frame da animação
+    requestAnimationFrame(animarMario);
+  }
+
+  // Iniciar a animação quando a imagem do sprite for carregada
+  marioSprite.onload = animarMario;
+</script>
+
+</body>
+</html>
